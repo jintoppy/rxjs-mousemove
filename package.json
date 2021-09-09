@@ -2,7 +2,11 @@
   "name": "rxjs",
   "version": "0.0.0",
   "private": true,
+  "scripts": {
+    "start": "parcel index.html"
+  },
   "dependencies": {
+    "parcel": "^2.0.0-rc.0",
     "rxjs": "latest"
   }
 }
