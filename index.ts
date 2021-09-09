@@ -1,6 +1,8 @@
-
+import './style.css';
 import { fromEvent, interval, timer, Observable } from 'rxjs';
 import { scan, tap, mapTo, debounceTime, filter, take, finalize, takeUntil, takeWhile, share, concatMap, switchMap, mergeMap, exhaustMap } from 'rxjs/operators';
+
+
 
 const s1$ = interval(1000);
 const click$ = fromEvent(document.querySelector('button'), 'click');
