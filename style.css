@@ -1,6 +1,15 @@
+body{
+  padding-top: 10px;
+}
 #scroller{
+  position: fixed;
+  top: 0;
   height: 5px;
   width: 100%;
   background-color: green;
   display: block;
+}
+
+header {
+  position: fixed;
 }

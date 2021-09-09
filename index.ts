@@ -4,41 +4,39 @@ import { scan, tap, mapTo, debounceTime, filter, take, finalize, takeUntil, take
 
 
 
-const s1$ = interval(1000);
-const click$ = fromEvent(document.querySelector('button'), 'click');
+// const s1$ = interval(1000);
+// const click$ = fromEvent(document.querySelector('button'), 'click');
 
-click$.pipe(
-  mergeMap(() => s1$.pipe(take(3)))
-)
-.subscribe(val => {
-  console.log(val);
-});
-
-
-// const stream = new Observable(obs => {
-//   console.log('inside observable function');
-//   setTimeout(() => {
-//     console.log('inside timeout1');
-//     obs.next(1);
-//   }, 100);
-
-//   setTimeout(() => {
-//     console.log('inside timeout2');
-//     obs.next(2);
-//   }, 200);
-// });
-
-// stream.pipe(share());
-
-// stream.subscribe((val) => {
+// click$.pipe(
+//   mergeMap(() => s1$.pipe(take(3)))
+// )
+// .subscribe(val => {
 //   console.log(val);
 // });
 
-// setTimeout(() => {
-//   stream.subscribe((val) => {
-//     console.log(val);
-//   });
-// }, 300);
+
+const stream = new Observable(obs => {
+  console.log('inside observable function');
+  setTimeout(() => {
+    obs.next('hi');
+  }, 100);
+
+  setTimeout(() => {
+    obs.next('hello');
+  }, 200);
+});
+
+const s1 = stream.pipe(share());
+
+s1.subscribe((val) => {
+  console.log('subscription1', val);
+});
+
+setTimeout(() => {
+  s1.subscribe((val) => {
+    console.log('subscription2', val);
+  });
+}, 150);
 
 
 
