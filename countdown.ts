@@ -25,9 +25,7 @@ merge(startClick$.pipe(mapTo(true)), pauseBtn$.pipe(mapTo(false)))
     }),
     switchMap((val) => val ? interval(1000) : empty()),
     mapTo(-1),
-    scan((acc: number, curr: number) => {
-        return acc + curr;
-    }, startValue),
+    scan((acc: number, curr: number) => acc + curr, startValue),
     takeWhile(val => val >= 0),
     takeUntil(stopClick$),
     startWith(startValue)
