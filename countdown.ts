@@ -23,13 +23,17 @@ merge(startClick$.pipe(mapTo(true)), pauseBtn$.pipe(mapTo(false)))
     tap(val => {
         console.log(val);
     }),
-    switchMap((val) => val ? interval(1000) : empty()),
-    mapTo(-1),
-    scan((acc: number, curr: number) => acc + curr, startValue),
-    takeWhile(val => val >= 0),
-    takeUntil(stopClick$),
-    startWith(startValue)
+    switchMap((val) => val ? interval(1000)
+    .pipe(          
+        mapTo(-1),
+        scan((acc: number, curr: number) => acc + curr, startValue),         
+        takeWhile(val => val >= 0),
+        takeUntil(stopClick$),
+        startWith(startValue)
+    )    
+    : empty())    
 )
 .subscribe(val => {
+    console.log(val);    
     counterDisplayHeader.innerHTML = val;
 });
