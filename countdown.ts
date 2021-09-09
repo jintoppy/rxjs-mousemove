@@ -14,9 +14,12 @@ const stopClick$ = fromEvent(stopBtn, 'click');
 const pauseBtn$ = fromEvent(pauseBtn, 'click');
 const interval$ = interval(1000);
 
+
+
 const startValue = 5;
 
-merge(startClick$.pipe(mapTo(true)), pauseBtn$.pipe(mapTo(false))).pipe(
+merge(startClick$.pipe(mapTo(true)), pauseBtn$.pipe(mapTo(false)))
+.pipe(
     tap(val => {
         console.log(val);
     }),
@@ -30,13 +33,5 @@ merge(startClick$.pipe(mapTo(true)), pauseBtn$.pipe(mapTo(false))).pipe(
     startWith(startValue)
 )
 .subscribe(val => {
-    console.log('inside subscribe');
     counterDisplayHeader.innerHTML = val;
-}, 
-() => {},
-() => {
-    console.log('completed');
-})
-
-
-
+});
