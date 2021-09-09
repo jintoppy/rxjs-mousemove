@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "parcel countdown-timer.html"
+    "start": "parcel polling.html"
   },
   "dependencies": {
     "parcel": "^2.0.0-rc.0",
