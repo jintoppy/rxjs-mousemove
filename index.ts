@@ -1,23 +1,78 @@
 
-import { fromEvent } from 'rxjs';
-import { scan, tap, mapTo, debounceTime, filter } from 'rxjs/operators';
+import { fromEvent, interval, timer, Observable } from 'rxjs';
+import { scan, tap, mapTo, debounceTime, filter, take, finalize, takeUntil, takeWhile, share, concatMap, switchMap, mergeMap, exhaustMap } from 'rxjs/operators';
 
-const s1 = fromEvent(document, 'mousemove');
+const s1$ = interval(1000);
+const click$ = fromEvent(document.querySelector('button'), 'click');
 
-let counter = 0;
-
-s1.pipe(
-  tap(() => {
-    document.body.style.backgroundColor = 'white';
-  }),
-  debounceTime(300),
-  tap(console.log),
-  filter((ev: any) => ev.clientX > 200 && ev.clientY > 200),
-  mapTo(1),
-  scan((acc:number, curr: number) => {
-    return acc + curr;
-  }, 0)
-).subscribe((val: any) => {
-  document.querySelector('#counter').innerHTML = `You reached ${val} times`;
-  document.body.style.backgroundColor = 'green';
+click$.pipe(
+  mergeMap(() => s1$.pipe(take(3)))
+)
+.subscribe(val => {
+  console.log(val);
 });
+
+
+// const stream = new Observable(obs => {
+//   console.log('inside observable function');
+//   setTimeout(() => {
+//     console.log('inside timeout1');
+//     obs.next(1);
+//   }, 100);
+
+//   setTimeout(() => {
+//     console.log('inside timeout2');
+//     obs.next(2);
+//   }, 200);
+// });
+
+// stream.pipe(share());
+
+// stream.subscribe((val) => {
+//   console.log(val);
+// });
+
+// setTimeout(() => {
+//   stream.subscribe((val) => {
+//     console.log(val);
+//   });
+// }, 300);
+
+
+
+// const s2 = timer(0, 5000);
+
+// const s1 = interval(1000).pipe(
+//   takeUntil(s2),
+//   tap(console.log),
+//   finalize(() => {
+//     console.log('final operator');
+//   })
+// );
+// s1.subscribe(val => {
+//   console.log(val);
+// },
+// () => {},
+// () => {
+//   console.log('final');
+// }
+// )
+
+
+// const s1 = fromEvent(document, 'mousemove');
+
+// s1.pipe(
+//   tap(() => {
+//     document.body.style.backgroundColor = 'white';
+//   }),
+//   debounceTime(300),
+//   tap(console.log),
+//   filter((ev: any) => ev.clientX > 200 && ev.clientY > 200),
+//   mapTo(1),
+//   scan((acc:number, curr: number) => {
+//     return acc + curr;
+//   }, 0)
+// ).subscribe((val: any) => {
+//   document.querySelector('#counter').innerHTML = `You reached ${val} times`;
+//   document.body.style.backgroundColor = 'green';
+// });
