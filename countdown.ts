@@ -1,7 +1,6 @@
 import './style.css';
-import { fromEvent, interval, merge, empty } from 'rxjs';
-import { switchMapTo, take, takeWhile, takeUntil, switchMap, concatMap, scan, mapTo, startWith, tap } from 'rxjs/operators';
-import { EMPTY_OBSERVER } from 'rxjs/dist/types/internal/Subscriber';
+import { fromEvent, interval, merge, EMPTY } from 'rxjs';
+import { switchMapTo, take, takeWhile, takeUntil, switchMap, repeat, mergeMap, repeatWhen, concatMap, scan, mapTo, startWith, tap } from 'rxjs/operators';
 
 
 const startBtn = document.querySelector('#startBtn');
@@ -16,24 +15,21 @@ const interval$ = interval(1000);
 
 
 
-const startValue = 5;
+const startValue = 200;
 
-merge(startClick$.pipe(mapTo(true)), pauseBtn$.pipe(mapTo(false)))
-.pipe(
-    tap(val => {
-        console.log(val);
-    }),
-    switchMap((val) => val ? interval(1000)
-    .pipe(          
-        mapTo(-1),
-        scan((acc: number, curr: number) => acc + curr, startValue),         
-        takeWhile(val => val >= 0),
-        takeUntil(stopClick$),
-        startWith(startValue)
-    )    
-    : empty())    
-)
-.subscribe(val => {
-    console.log(val);    
-    counterDisplayHeader.innerHTML = val;
-});
+merge(
+    startClick$.pipe(mapTo(true)),
+    pauseBtn$.pipe(mapTo(false))
+  )
+    .pipe(
+      switchMap(val => (val ? interval(10) : EMPTY)),
+      mapTo(-1),
+      scan((acc: number, curr: number) => acc + curr, startValue),
+      takeWhile(val => val >= 0),
+      startWith(startValue),
+      takeUntil(stopClick$),
+      repeat(),
+    )
+    .subscribe(val => {
+      counterDisplayHeader.innerHTML = val.toString();
+    });
